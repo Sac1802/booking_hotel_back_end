@@ -8,14 +8,14 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from 'src/users/schemas/user.schema';
+import { userDTO } from 'src/users/dto/user.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('register')
-  register(@Body() body: User) {
+  register(@Body() body: userDTO) {
     return this.authService.register(body);
   }
 

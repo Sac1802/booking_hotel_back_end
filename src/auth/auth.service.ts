@@ -4,6 +4,9 @@ import * as bcrypt from 'bcrypt';
 import { User } from 'src/users/schemas/user.schema';
 import { UsersService } from 'src/users/users.service';
 import { Types } from 'mongoose';
+import { UserMapper } from 'src/users/mappers/user.mapper';
+import { userDTO } from 'src/users/dto/user.dto';
+import { LoginDto } from 'src/users/dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +15,9 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(user: User) {
+  async register(userDTO: userDTO) {
+    let user = new User();
+    user = UserMapper.convertDTOToUser(userDTO);
     const userFind = await this.usersService.findByEmail(user.email);
     if (userFind) {
       throw new UnauthorizedException('Email already in use');
@@ -21,11 +26,10 @@ export class AuthService {
     return this.usersService.create(user);
   }
 
-  async validateUser(email: string, password: string) {
-    const userFind = await this.usersService.findByEmail(email);
+  async validateUser(loginDTO: LoginDto) {
+    const userFind = await this.usersService.findByEmail(loginDTO.email);
     if (!userFind) return null;
-
-    const match = await bcrypt.compare(password, userFind.password);
+    const match = await bcrypt.compare(loginDTO.password, userFind.password);
     if (!match) return null;
 
     return userFind;
