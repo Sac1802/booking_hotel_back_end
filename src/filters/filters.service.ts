@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, HydratedDocument } from 'mongoose'; // Added HydratedDocument
 import { RoomCombination } from './interfaces/room.combination';
@@ -35,6 +35,9 @@ export class FiltersService {
     startDate: Date,
     endDate: Date,
   ): Promise<PopulatedRoomDocument[]> {
+    if (startDate > endDate) {
+      throw new BadRequestException('Start date must be before end date');
+    }
     const reservationRooms = await this.reservationModel
       .find({
         active: true,
@@ -45,11 +48,9 @@ export class FiltersService {
         ],
       })
       .select('room')
-      .exec(); // Added .exec() for consistency
+      .exec();
 
     const reservationRoomIds = reservationRooms.map((r) => r.room.toString());
-
-    // Use .exec() and cast the result of the promise, not the query itself
     const rooms = await this.roomModel
       .find({
         _id: { $nin: reservationRoomIds },

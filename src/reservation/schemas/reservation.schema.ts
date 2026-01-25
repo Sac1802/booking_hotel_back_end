@@ -24,3 +24,7 @@ export class Reservation {
 }
 
 export const ReservationSchema = SchemaFactory.createForClass(Reservation);
+
+ReservationSchema.index({ room: 1 });
+ReservationSchema.index({ startDate: 1, endDate: 1 });
+ReservationSchema.index({ active: 1 });

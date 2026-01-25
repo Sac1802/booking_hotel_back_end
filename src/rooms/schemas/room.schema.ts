@@ -23,3 +23,7 @@ export class Room {
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);
+
+RoomSchema.index({ isAvailable: 1 });
+RoomSchema.index({ price: 1 });
+RoomSchema.index({ hotel: 1 });
