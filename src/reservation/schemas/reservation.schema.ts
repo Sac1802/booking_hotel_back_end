@@ -21,6 +21,12 @@ export class Reservation {
 
   @Prop({ required: true })
   active: boolean;
+
+  @Prop({ required: true })
+  finalCost: number;
+
+  @Prop({ default: 'CONFIRMED' })
+  status: 'CONFIRMED';
 }
 
 export const ReservationSchema = SchemaFactory.createForClass(Reservation);

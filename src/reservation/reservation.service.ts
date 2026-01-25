@@ -32,20 +32,36 @@ export class ReservationService {
   }
 
   async create(createReservationDto: CreateReservationDto, userId: string) {
-    const findRoom = await this.checkAvailability(createReservationDto);
+    const startDate = new Date(createReservationDto.startDate);
+    const endDate = new Date(createReservationDto.endDate);
 
-    if (findRoom) {
+    const available = await this.checkAvailability(createReservationDto);
+    if (!available) {
       throw new ConflictException(
         'The room is already reserved for the selected dates',
       );
     }
 
+    const nights = Math.ceil(
+      (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+    );
+
+    const room = await this.roomModel.findById(createReservationDto.roomId);
+    if (!room) {
+      throw new NotFoundException(
+        `Room ${createReservationDto.roomId} not found`,
+      );
+    }
+
+    const finalCost = room.price * nights;
+
     return this.reservationModel.create({
       room: createReservationDto.roomId,
       user: userId,
-      startDate: createReservationDto.startDate,
-      endDate: createReservationDto.endDate,
+      startDate,
+      endDate,
       active: true,
+      finalCost,
     });
   }
 
