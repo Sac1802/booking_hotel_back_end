@@ -15,6 +15,9 @@ export class Room {
   @Prop({ required: true })
   isAvailable: boolean;
 
+  @Prop({ required: true })
+  price: number;
+
   @Prop({ type: Types.ObjectId, ref: Hotel.name, required: true })
   hotel: Types.ObjectId;
 }

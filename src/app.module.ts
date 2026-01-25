@@ -6,6 +6,8 @@ import { UsersModule } from './users/users.module';
 import { HotelsModule } from './hotels/hotels.module';
 import { RoomsModule } from './rooms/rooms.module';
 import { SeedModule } from './seed/seed.module';
+import { ReservationModule } from './reservation/reservation.module';
+import { FiltersModule } from './filters/filters.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { SeedModule } from './seed/seed.module';
     HotelsModule,
     RoomsModule,
     SeedModule,
+    ReservationModule,
+    FiltersModule,
   ],
   controllers: [],
   providers: [],
