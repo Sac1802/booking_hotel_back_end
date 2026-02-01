@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { User } from 'src/users/schemas/user.schema';
+import { User, UserDocument } from 'src/users/schemas/user.schema';
 import { UsersService } from 'src/users/users.service';
-import { Types } from 'mongoose';
+
 import { UserMapper } from 'src/users/mappers/user.mapper';
 import { userDTO } from 'src/users/dto/user.dto';
 import { LoginDto } from 'src/users/dto/login.dto';
@@ -35,7 +35,7 @@ export class AuthService {
     return userFind;
   }
 
-  generateJwt(user: User & { _id: Types.ObjectId }) {
+  generateJwt(user: UserDocument) {
     const payload = { sub: user._id, email: user.email, role: user.role };
 
     return {

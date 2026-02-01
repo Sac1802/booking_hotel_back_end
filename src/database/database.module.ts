@@ -1,15 +1,14 @@
 import { Module, Logger } from '@nestjs/common';
 import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Connection } from 'mongoose';
 
 @Module({
   imports: [
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (
-        config: ConfigService,
-      ): MongooseModuleFactoryOptions => {
+      useFactory: (config: ConfigService): MongooseModuleFactoryOptions => {
         const uri = config.get<string>('URL_DATABASE');
 
         if (!uri) {
@@ -20,11 +19,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
         return {
           uri,
-          connectionFactory: (connection) => {
-            Logger.log(
-              'MongoDB connected successfully',
-              'DatabaseModule',
-            );
+          connectionFactory: (connection: Connection) => {
+            Logger.log('MongoDB connected successfully', 'DatabaseModule');
             return connection;
           },
         };

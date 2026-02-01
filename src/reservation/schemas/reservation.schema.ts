@@ -2,6 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Room } from 'src/rooms/schemas/room.schema';
 import { User } from 'src/users/schemas/user.schema';
+import { states } from '../enum/states.reservation';
 
 export type ReservationDocument = Reservation & Document;
 
@@ -25,8 +26,8 @@ export class Reservation {
   @Prop({ required: true })
   finalCost: number;
 
-  @Prop({ default: 'CONFIRMED' })
-  status: 'CONFIRMED';
+  @Prop({ type: String, enum: states, default: states.CONFIRMED })
+  status: states;
 }
 
 export const ReservationSchema = SchemaFactory.createForClass(Reservation);

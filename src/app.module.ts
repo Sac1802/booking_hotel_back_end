@@ -8,6 +8,8 @@ import { RoomsModule } from './rooms/rooms.module';
 import { SeedModule } from './seed/seed.module';
 import { ReservationModule } from './reservation/reservation.module';
 import { FiltersModule } from './filters/filters.module';
+import { FestiveCalendarService } from './festive-calendar/festive-calendar.service';
+import { FestiveCalendarModule } from './festive-calendar/festive-calendar.module';
 
 @Module({
   imports: [
@@ -20,8 +22,9 @@ import { FiltersModule } from './filters/filters.module';
     SeedModule,
     ReservationModule,
     FiltersModule,
+    FestiveCalendarModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [FestiveCalendarService],
 })
 export class AppModule {}

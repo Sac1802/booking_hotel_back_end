@@ -24,13 +24,17 @@ export type PopulatedRoomDocument = Omit<
 export class FiltersService {
   constructor(
     @InjectModel(Reservation.name)
-    private reservationModel: Model<ReservationDocument>,
+    private readonly reservationModel: Model<ReservationDocument>,
     @InjectModel(Room.name)
-    private roomModel: Model<RoomDocument>,
+    private readonly roomModel: Model<RoomDocument>,
   ) {}
 
   private results: RoomCombination[];
 
+  /**
+   * Retrieves rooms marked as available within a given date range,
+   * excluding those with overlapping reservations.
+   */
   async getRoomsAvailable(
     startDate: Date,
     endDate: Date,
@@ -62,6 +66,10 @@ export class FiltersService {
     return rooms as unknown as PopulatedRoomDocument[];
   }
 
+  /**
+   * Starts the process of finding room combinations that
+   * together can meet a required guest capacity.
+   */
   async combinationRooms(
     startDate: Date,
     endDate: Date,
@@ -75,6 +83,10 @@ export class FiltersService {
     return this.results;
   }
 
+  /**
+   * Uses a recursive backtracking algorithm to generate all valid room
+   * combinations that satisfy the requested capacity.
+   */
   validateBack(
     start: number,
     combination: PopulatedRoomDocument[],
@@ -126,6 +138,10 @@ export class FiltersService {
     );
   }
 
+  /**
+   * Coordinates the full search flow: gets available rooms, applies filters
+   * (city/price), and returns valid room combinations based on the number of guests.
+   */
   async searchRooms(
     startDate: Date,
     endDate: Date,
