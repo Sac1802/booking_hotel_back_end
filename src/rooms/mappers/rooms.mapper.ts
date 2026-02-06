@@ -17,6 +17,7 @@ export class RoomMapper {
       room.hotel = hotelFind._id;
     }
     if (dto.isAvailable !== undefined) room.isAvailable = dto.isAvailable;
+    if (dto.price !== undefined) room.price = dto.price;
     return room;
   }
 

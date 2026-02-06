@@ -9,6 +9,7 @@ export class HotelMapper {
     if (dto.city !== undefined) hotel.city = dto.city;
     if (dto.description !== undefined) hotel.description = dto.description;
     if (dto.isActive !== undefined) hotel.isActive = dto.isActive;
+    if (dto.country !== undefined) hotel.country = dto.country;
 
     return hotel;
   }

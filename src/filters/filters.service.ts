@@ -138,6 +138,16 @@ export class FiltersService {
     );
   }
 
+  validateDate(startDate: Date, endDate: Date) {
+    const dateNow: Date = new Date();
+    if (
+      startDate.getDate() < dateNow.getDate() ||
+      endDate.getDate() < dateNow.getDate()
+    ) {
+      throw new BadRequestException('Enter a date later than the current date');
+    }
+  }
+
   /**
    * Coordinates the full search flow: gets available rooms, applies filters
    * (city/price), and returns valid room combinations based on the number of guests.
@@ -150,6 +160,8 @@ export class FiltersService {
     minPrice?: number,
     maxPrice?: number,
   ) {
+    this.validateDate(startDate, endDate);
+
     let roomsPool: PopulatedRoomDocument[] = await this.getRoomsAvailable(
       startDate,
       endDate,
