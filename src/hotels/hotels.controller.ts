@@ -33,7 +33,6 @@ export class HotelsController {
     return this.hotelsService.create(body);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('get/all')
   @ApiOperation({ summary: 'Retrieve all hotels' })
   @ApiResponse({ status: 200, description: 'List of all hotels.' })

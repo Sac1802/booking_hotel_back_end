@@ -20,6 +20,9 @@ export class Room {
 
   @Prop({ type: Types.ObjectId, ref: Hotel.name, required: true })
   hotel: Types.ObjectId;
+
+  @Prop({ required: true })
+  description: string;
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);

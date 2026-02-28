@@ -31,10 +31,6 @@ export class FiltersService {
 
   private results: RoomCombination[];
 
-  /**
-   * Retrieves rooms marked as available within a given date range,
-   * excluding those with overlapping reservations.
-   */
   async getRoomsAvailable(
     startDate: Date,
     endDate: Date,
@@ -66,10 +62,6 @@ export class FiltersService {
     return rooms as unknown as PopulatedRoomDocument[];
   }
 
-  /**
-   * Starts the process of finding room combinations that
-   * together can meet a required guest capacity.
-   */
   async combinationRooms(
     startDate: Date,
     endDate: Date,
@@ -83,10 +75,6 @@ export class FiltersService {
     return this.results;
   }
 
-  /**
-   * Uses a recursive backtracking algorithm to generate all valid room
-   * combinations that satisfy the requested capacity.
-   */
   validateBack(
     start: number,
     combination: PopulatedRoomDocument[],
@@ -139,19 +127,20 @@ export class FiltersService {
   }
 
   validateDate(startDate: Date, endDate: Date) {
-    const dateNow: Date = new Date();
-    if (
-      startDate.getDate() < dateNow.getDate() ||
-      endDate.getDate() < dateNow.getDate()
-    ) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(endDate);
+    end.setHours(0, 0, 0, 0);
+
+    if (start.getTime() < today.getTime() || end.getTime() < today.getTime()) {
       throw new BadRequestException('Enter a date later than the current date');
     }
   }
 
-  /**
-   * Coordinates the full search flow: gets available rooms, applies filters
-   * (city/price), and returns valid room combinations based on the number of guests.
-   */
   async searchRooms(
     startDate: Date,
     endDate: Date,
@@ -192,6 +181,7 @@ export class FiltersService {
           type: r.name,
           price: r.price,
           capacity: r.capacity,
+          description: r.description,
         })),
         totalPrice: combo.totalPrice,
         available: true,

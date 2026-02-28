@@ -47,6 +47,8 @@ export class SeedService {
         capacity: 2,
         isAvailable: true,
         price: 120,
+        description:
+          'Comfortable room with a king-size bed, perfect for couples.',
         hotel: createdHotels[0]._id,
       },
       {
@@ -54,6 +56,8 @@ export class SeedService {
         capacity: 4,
         isAvailable: true,
         price: 250,
+        description:
+          'Spacious suite with separate living area and premium amenities.',
         hotel: createdHotels[0]._id,
       },
       {
@@ -61,6 +65,8 @@ export class SeedService {
         capacity: 6,
         isAvailable: false,
         price: 500,
+        description:
+          'Luxurious suite with panoramic city views and exclusive services.',
         hotel: createdHotels[0]._id,
       },
 
@@ -69,6 +75,8 @@ export class SeedService {
         capacity: 2,
         isAvailable: true,
         price: 150,
+        description:
+          'Modern room designed for business travelers with workspace.',
         hotel: createdHotels[1]._id,
       },
       {
@@ -76,6 +84,8 @@ export class SeedService {
         capacity: 5,
         isAvailable: true,
         price: 300,
+        description:
+          'Large room perfect for families, with extra beds and space.',
         hotel: createdHotels[1]._id,
       },
       {
@@ -83,6 +93,7 @@ export class SeedService {
         capacity: 3,
         isAvailable: true,
         price: 220,
+        description: 'Suite equipped with business center and meeting area.',
         hotel: createdHotels[1]._id,
       },
 
@@ -91,6 +102,7 @@ export class SeedService {
         capacity: 4,
         isAvailable: true,
         price: 280,
+        description: 'Beautiful room with stunning ocean views and balcony.',
         hotel: createdHotels[2]._id,
       },
       {
@@ -98,6 +110,8 @@ export class SeedService {
         capacity: 3,
         isAvailable: false,
         price: 200,
+        description:
+          'Private bungalow with direct beach access and tropical decor.',
         hotel: createdHotels[2]._id,
       },
       {
@@ -105,6 +119,8 @@ export class SeedService {
         capacity: 1,
         isAvailable: true,
         price: 90,
+        description:
+          'Cozy room overlooking the lush gardens, ideal for solo travelers.',
         hotel: createdHotels[2]._id,
       },
       {
@@ -112,6 +128,8 @@ export class SeedService {
         capacity: 8,
         isAvailable: true,
         price: 600,
+        description:
+          'Ultimate luxury penthouse with private pool and butler service.',
         hotel: createdHotels[2]._id,
       },
     ];
