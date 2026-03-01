@@ -52,6 +52,15 @@ export class RoomsController {
     return this.roomsService.getById(id);
   }
 
+  @Get('get/hotel/:id')
+  @ApiOperation({ summary: 'Retrieve a room by ID' })
+  @ApiResponse({ status: 200, description: 'Room found.' })
+  @ApiResponse({ status: 401, description: 'Unauthorized.' })
+  @ApiResponse({ status: 404, description: 'Room not found.' })
+  getRoomsByIdHotel(@Param('id') id: string) {
+    return this.roomsService.getAllRoomsByHotelId(id);
+  }
+
   @UseGuards(AuthGuard('jwt'))
   @Put('update/:id')
   @ApiOperation({ summary: 'Update an existing room by ID' })

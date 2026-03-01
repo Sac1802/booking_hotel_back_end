@@ -175,13 +175,13 @@ export class ReservationService {
     }
 
     if (data.childCount > 0) {
-      appliedPromos.push('Children under 5 free');
+      appliedPromos.push('Niños menores de 5 años gratis');
     }
 
     if (data.adultCount != null && data.adultCount > 8) {
       const groupDiscount: number = costTotal * 0.15;
       discount += groupDiscount;
-      appliedPromos.push('Large group discount (15%)');
+      appliedPromos.push('Descuento para grupos grandes (15%)');
     }
 
     const festivePromo = await this.festiveModel.findOne({
@@ -196,7 +196,9 @@ export class ReservationService {
       const festiveDiscount: number =
         costTotal * (festivePromo.discountPercentage / 100);
       discount += festiveDiscount;
-      appliedPromos.push(`Local Holiday (${festivePromo.discountPercentage}%)`);
+      appliedPromos.push(
+        `Dias de Fiesta local (${festivePromo.discountPercentage}%)`,
+      );
     }
 
     const finalCost: number = costTotal - discount;
@@ -210,7 +212,8 @@ export class ReservationService {
       promotionsApplied: appliedPromos,
       estimatedDiscount: discount,
       finalCost: finalCost,
-      cancellationPolicy: 'Cancellation 3 days before the reservation date.',
+      cancellationPolicy:
+        'Las reservas se pueden cancelar hasta tres días antes de la fecha de reserva.',
     };
   }
 

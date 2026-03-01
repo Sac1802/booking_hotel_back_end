@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, HydratedDocument } from 'mongoose'; // Added HydratedDocument
+import { Model, HydratedDocument } from 'mongoose';
 import { RoomCombination } from './interfaces/room.combination';
 import {
   Reservation,

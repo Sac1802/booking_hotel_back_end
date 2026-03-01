@@ -18,7 +18,7 @@ export class ConfirmBookingDto {
     example: ['room1_id', 'room2_id'],
     description: 'An array of room IDs to confirm booking for',
   })
-  roomId: string[];
+  roomsId: string[];
 
   @ApiProperty({
     example: 2,

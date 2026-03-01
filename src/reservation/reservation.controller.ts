@@ -85,11 +85,11 @@ export class ReservationController {
   async confirm(@Body() dto: ConfirmBookingDto, @User() user: AuthUser) {
     const reservations = [];
 
-    for (const roomsId of dto.roomId) {
+    for (const id of dto.roomsId) {
       reservations.push(
         await this.reservationService.create(
           {
-            roomId: roomsId,
+            roomId: id,
             startDate: dto.startDate,
             endDate: dto.endDate,
             adultCount: dto.adultCount,

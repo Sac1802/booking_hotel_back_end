@@ -41,7 +41,6 @@ export class HotelsController {
     return this.hotelsService.getAllHotel();
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('get/:id')
   @ApiOperation({ summary: 'Retrieve a hotel by ID' })
   @ApiResponse({ status: 200, description: 'Hotel found.' })

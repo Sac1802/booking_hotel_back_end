@@ -55,4 +55,14 @@ export class RoomsService {
     await this.RoomModel.findByIdAndDelete(id);
     return 'delete succesfully';
   }
+
+  async getAllRoomsByHotelId(id: string) {
+    if (!Types.ObjectId.isValid(id)) {
+      return [];
+    }
+
+    return await this.RoomModel.find({
+      hotel: new Types.ObjectId(id),
+    }).exec();
+  }
 }
