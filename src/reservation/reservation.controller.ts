@@ -20,6 +20,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
 } from '@nestjs/swagger';
+import { Types } from 'mongoose';
 
 @ApiTags('Reservation')
 @ApiBearerAuth()
@@ -84,6 +85,7 @@ export class ReservationController {
   @ApiResponse({ status: 404, description: 'Room not found.' })
   async confirm(@Body() dto: ConfirmBookingDto, @User() user: AuthUser) {
     const reservations = [];
+    const bookingId = new Types.ObjectId().toString();
 
     for (const id of dto.roomsId) {
       reservations.push(
@@ -96,6 +98,7 @@ export class ReservationController {
             childCount: dto.childCount,
           },
           user.id,
+          bookingId,
         ),
       );
     }

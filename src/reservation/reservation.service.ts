@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Reservation, ReservationDocument } from './schemas/reservation.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { PreBookingDTO } from './dto/pre-booking.dto';
 import { Room, RoomDocument } from 'src/rooms/schemas/room.schema';
@@ -39,7 +39,11 @@ export class ReservationService {
     return true;
   }
 
-  async create(createReservationDto: CreateReservationDto, userId: string) {
+  async create(
+    createReservationDto: CreateReservationDto,
+    userId: string,
+    bookingId?: string,
+  ) {
     const startDate = new Date(createReservationDto.startDate);
     const endDate = new Date(createReservationDto.endDate);
 
@@ -97,6 +101,7 @@ export class ReservationService {
     const finalCost = costTotal - discount;
 
     const reservation = await this.reservationModel.create({
+      bookingId: bookingId ? new Types.ObjectId(bookingId) : undefined,
       room: createReservationDto.roomId,
       user: userId,
       startDate,
@@ -243,12 +248,13 @@ export class ReservationService {
 
     if (diffDays >= 3) {
       reservation.status = states.CANCELED;
+      reservation.active = false;
       await reservation.save();
       return { message: 'Reservation canceled successfully.' };
     }
 
     throw new BadRequestException(
-      'Cancellation rejected. You must cancel at least 3 days before check-in.',
+      'Cancelación rechazada. Debe cancelar al menos 3 días antes de la llegada.',
     );
   }
 
@@ -272,43 +278,63 @@ export class ReservationService {
   async getReservationForUser(idUser: string) {
     const findReservations = await this.reservationModel
       .find({ user: idUser })
-      .populate('room', 'name')
+      .populate({
+        path: 'room',
+        select: 'name hotel',
+        populate: { path: 'hotel', select: 'name' },
+      })
       .exec();
 
-    type GroupedReservation = {
+    type ReservationResponse = {
       checkIn: Date;
       checkOut: Date;
-      rooms: { id: string; name: string }[];
+      hotelName: string | null;
+      reservationIds: string[];
+      rooms: { id: string; name: string; reservationId: string }[];
       totalCost: number;
       status: states[];
     };
 
-    const groupedReservations: Record<string, GroupedReservation> = {};
+    const groupedReservations: Record<string, ReservationResponse> = {};
 
     for (const res of findReservations) {
-      const start = res.startDate.toDateString();
-      const end = res.endDate.toDateString();
-      const key = `${start}-${end}`;
+      const room = res.room as unknown as {
+        _id: string;
+        name: string;
+        hotel?: { _id?: string; name?: string };
+      } | null;
+
+      const reservationWithBooking = res as unknown as Reservation & {
+        _id: Types.ObjectId;
+        bookingId?: Types.ObjectId;
+      };
+      const key =
+        reservationWithBooking.bookingId?.toString() ??
+        reservationWithBooking._id.toString();
 
       if (!groupedReservations[key]) {
         groupedReservations[key] = {
           checkIn: res.startDate,
           checkOut: res.endDate,
+          hotelName: room?.hotel?.name ?? null,
+          reservationIds: [],
           rooms: [],
           totalCost: 0,
           status: [],
         };
       }
 
-      const room = res.room as unknown as { _id: string; name: string };
-
-      groupedReservations[key].rooms.push({
-        id: room._id.toString(),
-        name: room.name,
-      });
+      groupedReservations[key].reservationIds.push(res._id.toString());
       groupedReservations[key].status.push(res.status);
-
       groupedReservations[key].totalCost += res.finalCost;
+
+      if (room) {
+        groupedReservations[key].rooms.push({
+          id: room._id.toString(),
+          name: room.name,
+          reservationId: res._id.toString(),
+        });
+      }
     }
 
     return Object.values(groupedReservations);

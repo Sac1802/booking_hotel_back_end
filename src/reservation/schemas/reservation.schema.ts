@@ -8,6 +8,9 @@ export type ReservationDocument = Reservation & Document;
 
 @Schema({ timestamps: true })
 export class Reservation {
+  @Prop({ type: Types.ObjectId })
+  bookingId?: Types.ObjectId;
+
   @Prop({ type: Types.ObjectId, ref: Room.name, required: true })
   room: Types.ObjectId;
 
@@ -33,5 +36,6 @@ export class Reservation {
 export const ReservationSchema = SchemaFactory.createForClass(Reservation);
 
 ReservationSchema.index({ room: 1 });
+ReservationSchema.index({ bookingId: 1 });
 ReservationSchema.index({ startDate: 1, endDate: 1 });
 ReservationSchema.index({ active: 1 });

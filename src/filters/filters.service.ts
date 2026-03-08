@@ -94,6 +94,14 @@ export class FiltersService {
 
     for (let i = start; i < roomsAvailable.length; i++) {
       const room = roomsAvailable[i];
+
+      if (
+        combination.length > 0 &&
+        room.hotel._id.toString() !== combination[0].hotel._id.toString()
+      ) {
+        continue;
+      }
+
       this.validateBack(
         i + 1,
         [...combination, room],
