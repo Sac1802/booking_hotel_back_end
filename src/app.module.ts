@@ -3,6 +3,13 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { HotelsModule } from './hotels/hotels.module';
+import { RoomsModule } from './rooms/rooms.module';
+import { SeedModule } from './seed/seed.module';
+import { ReservationModule } from './reservation/reservation.module';
+import { FiltersModule } from './filters/filters.module';
+import { FestiveCalendarService } from './festive-calendar/festive-calendar.service';
+import { FestiveCalendarModule } from './festive-calendar/festive-calendar.module';
 
 @Module({
   imports: [
@@ -10,6 +17,14 @@ import { UsersModule } from './users/users.module';
     DatabaseModule,
     AuthModule,
     UsersModule,
+    HotelsModule,
+    RoomsModule,
+    SeedModule,
+    ReservationModule,
+    FiltersModule,
+    FestiveCalendarModule,
   ],
+  controllers: [],
+  providers: [FestiveCalendarService],
 })
 export class AppModule {}
